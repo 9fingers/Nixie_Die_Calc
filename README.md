@@ -9,4 +9,9 @@ Arduino MEGA 2560
 Adafruuit RA8875 Driver Chip (Part # 1590)
 Adafruit 5.0" TFT (800x480) (Part # 1596)
 
+SD CARD read write assign vars
+http://overskill.alexshu.com/saving-loading-settings-on-sd-card-with-arduino/
+
+
+
 
