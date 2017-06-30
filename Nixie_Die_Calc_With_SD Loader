@@ -942,16 +942,14 @@ void setup()
 
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
+/*
   while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
   Serial.print("Initializing SD card...");
+  */
   pinMode(10, OUTPUT);
-  if (!SD.begin(53)) {
-    Serial.println("initialization failed!");
-    return;
-  }
-  Serial.println("initialization done.");
+  SD.begin(53);
   readSDSettings();
 
   // initialize the digital pins for the tubes as outputs
