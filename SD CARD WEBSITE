@@ -1,0 +1,224 @@
+Revisited – Fixed some bugs, improved stability, changed the file structure for mistake-proof reading, added Long integer support.
+
+For my AquaTank project I needed the ability to change settings of the system and I needed them to stay after power loss.
+There is an option to use Arduinos built-in EEPROM to pemanently store data, but they have read/write cycle limit and its messy.
+So for my Project I decided to use an external SD card and store the values inside a file – in my case its SETTINGS.TXT
+
+SETTINGS.TXT
+
+The structure of the file goes like this:
+[parameter_name1=value1]
+[parameter_name2=value2]
+[parameter_name3=value3]
+
+In my example its:
+[exINT=15]
+[exFloat=1.12345]
+[exBoolean=1]
+[exLong=2123456789]
+
+The brackets “[” and “]” were added in the revisit, according to Gregor van Egdom, some text editors have different formatting and it was messing with the new line detection,
+now the code reads only within the brackets, so its more solid and won’t get confused by anything.
+
+The code was even tested with the following file and worked flawlessly (whatever is outside of the brackets is not read by the code):
+[exINT=15] THIS IS NOT READ
+[exFloat=1.12345] BLAH BLAH
+[exBoolean=1] This is a comment
+[exLong=2123456789] LOL
+
+This sums all my needs storing integers,long integers, floats, and boolean variables to specify if some feature is on or off
+
+The Setup
+
+Using any available Arduino SD Card Shield even a DIY one (will be soon),
+You have 2 general functions that you use :
+
+readSDSettings – opens the file, and going line by line separating the parameter name and the value into 2 strings, using another function, applySetting that gets both strings with a simple if functions converts it to the right type (int,float,boolean,long) and applies to the right parameter.
+
+writeSDSettings – first thing deletes the SETTINGS.TXT file and creates a new one, using the current parameters in the arduinos memory
+
+The Code:
+
+DATA HOSTED WITH ♥ BY PASTEBIN.COM - DOWNLOAD RAW - SEE ORIGINAL
+/*
+  Saving & Loading Settings on SD Card with Arduino by Alex Shu
+  http://overskill.alexshu.com/saving-loading-settings-on-sd-card-with-arduino/
+ 
+  SD card connections:
+ ** MOSI - pin 11
+ ** MISO - pin 12
+ ** CLK - pin 13
+ ** CS - pin 4
+ */
+ 
+ #include <SPI.h>
+ #include <SD.h>
+ 
+ File myFile;
+ int exINT = 15;
+ float exFloat = 1.12345;
+ boolean exBoolean = true;
+ long exLong = 2123456789;
+ 
+ void setup()
+ {
+ // Open serial communications and wait for port to open:
+ Serial.begin(9600);
+ while (!Serial) {
+ ; // wait for serial port to connect. Needed for Leonardo only
+ }
+ Serial.print("Initializing SD card...");
+ // On the Ethernet Shield, CS is pin 4. It's set as an output by default.
+ // Note that even if it's not used as the CS pin, the hardware SS pin
+ // (10 on most Arduino boards, 53 on the Mega) must be left as an output
+ // or the SD library functions will not work.
+ pinMode(10, OUTPUT);
+ if (!SD.begin(4)) {
+ Serial.println("initialization failed!");
+ return;
+ }
+ Serial.println("initialization done.");
+ writeSDSettings();
+ readSDSettings();
+ 
+ /*
+ //Debuuging Printing
+ Serial.println("In RAM Memory");
+ Serial.print("exINT=");
+ Serial.println(exINT);
+ Serial.print("exFloat=");
+ Serial.println(exFloat,10);
+ Serial.print("exBoolean=");
+ Serial.println(exBoolean);
+ Serial.print("exLong=");
+ Serial.println(exLong);
+ */
+ }
+ 
+ void loop()
+ {
+ }
+ 
+ void readSDSettings(){
+ char character;
+ String settingName;
+ String settingValue;
+ myFile = SD.open("settings.txt");
+ if (myFile) {
+ while (myFile.available()) {
+ character = myFile.read();
+ while((myFile.available()) && (character != '[')){
+ character = myFile.read();
+ }
+ character = myFile.read();
+ while((myFile.available()) && (character != '=')){
+ settingName = settingName + character;
+ character = myFile.read();
+ }
+ character = myFile.read();
+ while((myFile.available()) && (character != ']')){
+ settingValue = settingValue + character;
+ character = myFile.read();
+ }
+ if(character == ']'){
+ 
+ /*
+ //Debuuging Printing
+ Serial.print("Name:");
+ Serial.println(settingName);
+ Serial.print("Value :");
+ Serial.println(settingValue);
+ */
+ 
+ // Apply the value to the parameter
+ applySetting(settingName,settingValue);
+ // Reset Strings
+ settingName = "";
+ settingValue = "";
+ }
+ }
+ // close the file:
+ myFile.close();
+ } else {
+ // if the file didn't open, print an error:
+ Serial.println("error opening settings.txt");
+ }
+ }
+ 
+ /* Apply the value to the parameter by searching for the parameter name
+ Using String.toInt(); for Integers
+ toFloat(string); for Float
+ toBoolean(string); for Boolean
+ toLong(string); for Long
+ */
+ void applySetting(String settingName, String settingValue) {
+ if(settingName == "exINT") {
+ exINT=settingValue.toInt();
+ }
+ if(settingName == "exFloat") {
+ exFloat=toFloat(settingValue);
+ }
+ if(settingName == "exBoolean") {
+ exBoolean=toBoolean(settingValue);
+ }
+ if(settingName == "exLong") {
+ exLong=toLong(settingValue);
+ }
+ }
+ 
+ // converting string to Float
+ float toFloat(String settingValue){
+ char floatbuf[settingValue.length()+1];
+ settingValue.toCharArray(floatbuf, sizeof(floatbuf));
+ float f = atof(floatbuf);
+ return f;
+ }
+ 
+ long toLong(String settingValue){
+ char longbuf[settingValue.length()+1];
+ settingValue.toCharArray(longbuf, sizeof(longbuf));
+ long l = atol(longbuf);
+ return l;
+ }
+ 
+ // Converting String to integer and then to boolean
+ // 1 = true
+ // 0 = false
+ boolean toBoolean(String settingValue) {
+ if(settingValue.toInt()==1){
+ return true;
+ } else {
+ return false;
+ }
+ }
+ 
+ // Writes A Configuration file
+ void writeSDSettings() {
+ // Delete the old One
+ SD.remove("settings.txt");
+ // Create new one
+ myFile = SD.open("settings.txt", FILE_WRITE);
+ // writing in the file works just like regular print()/println() function
+ myFile.print("[");
+ myFile.print("exINT=");
+ myFile.print(exINT);
+ myFile.println("]");
+ myFile.print("[");
+ myFile.print("exFloat=");
+ myFile.print(exFloat,5);
+ myFile.println("]");
+ myFile.print("[");
+ myFile.print("exBoolean=");
+ myFile.print(exBoolean);
+ myFile.println("]");
+ myFile.print("[");
+ myFile.print("exLong=");
+ myFile.print(exLong);
+ myFile.println("]");
+ // close the file:
+ myFile.close();
+ //Serial.println("Writing done.");
+ }
+The code last tested on Arduino IDE 1.6.3 of Arduino.cc
+
+Hope it helps you with your project 🙂
