@@ -12,6 +12,10 @@
   BSD license, check license.txt for more information.
   All text above must be included in any redistribution.
  ******************************************************************/
+ /*
+ SD card code credit to:
+http://overskill.alexshu.com/saving-loading-settings-on-sd-card-with-arduino/
+ */
 
 #include <Arduino.h>
 #include <SPI.h>
