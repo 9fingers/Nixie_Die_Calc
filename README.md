@@ -4,6 +4,8 @@ An Arduino 2560 controlled die calculator that uses a 5.0" TFT for inputs, and d
 
 TFT control sketch is using the stock Adafrtuit RA8875 library.<br />
 
+Videos of the project in its different states of flux. If you are curious as to how it functions watch the videos.https://www.youtube.com/user/BrnChknBrnCow
+
 Hardware compatibility <br />
 Nixie IN-18 <br />
 IC 74141 Nixie control 16 pin chips<br />
