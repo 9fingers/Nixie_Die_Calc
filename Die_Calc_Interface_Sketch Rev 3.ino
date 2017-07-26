@@ -12,10 +12,10 @@
   BSD license, check license.txt for more information.
   All text above must be included in any redistribution.
  ******************************************************************/
- /*
- SD card code credit to:
-http://overskill.alexshu.com/saving-loading-settings-on-sd-card-with-arduino/
- */
+/*
+  SD card code credit to:
+  http://overskill.alexshu.com/saving-loading-settings-on-sd-card-with-arduino/
+*/
 
 #include <Arduino.h>
 #include <SPI.h>
@@ -247,7 +247,7 @@ void resetCenterMainStage()
   int txtStarty = 301;
 
   // Draw text boundry box on stage (Gobal variables defined at top of code structure)
-  tft.fillRect(102, 102, 596, 196, RA8875_BLACK);
+  tft.fillRect(102, 102, 596, 280, RA8875_BLACK);
   // tft.fillRect (TXTxStart, TXTyStart, TXTxWidth, TXTyWidth, RA8875_BLACK);
   // Draw black background for text area
   tft.drawRect (TXTxStart, TXTyStart, TXTxWidth, TXTyWidth, RA8875_CYAN);
@@ -302,6 +302,7 @@ void drawSaveStage()
   int TXTyStart = 100;
   int TXTxWidth = 600;
   int TXTyWidth = 280;
+  // tft.fillRect(100,100,600,285, RA8875_RED);
   // Home button for all saving throw pages
   tft.fillRoundRect(250, 220, 300, 60, DRad, RA8875_WHITE);
   tft.fillRoundRect(250 + 3 , 220 + 3, 300 - 6 , 60 - 6, DRad, RA8875_BLUE);
@@ -881,6 +882,9 @@ void applySetting(String settingName, String settingValue) {
   }
   if (settingName == "strSave") {
     strSave = settingValue.toInt();
+  }
+  if (settingName == "athletics") {
+    athletics = settingValue.toInt();
   }
   if (settingName == "DEX") {
     DEX = settingValue.toInt();
@@ -1945,7 +1949,7 @@ void loop()
     while (stageNumber == 0) {
       readMainStage();
       if (stageNumber > 0) {
-        tft.fillRect (100, 100, 600, 280, RA8875_BLACK); // clears screen for next stage
+        // tft.fillRect (100, 100, 600, 310, RA8875_RED); // clears screen for next stage
         return;
       }
     }
