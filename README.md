@@ -28,7 +28,7 @@ Eli Delia: Entrepreneur, graphics designer, jack of all trades.<br />
 Modeled the dragon head for the final build. Introduced me to Fusion 360, and is defining the 3D print jobs for the final build. 
 
 Last but not least, Conor Mooreman: Muse<br />
-Conor was my inspiration to start this project, and to see it through to completion. So many times I have started projects like this and not completed them. Am truly happy to have this one so close to completion, can't wait for him to be able to try to use this.
+Conor was my inspiration to start this project, and to see it through to completion. So many times I have started projects like this and not completed them. Am truly happy to have this one so close to completion, can't wait for him to be able to try to use this. Conor has limited mobility, and dexterity, thus he cannot retrieve dice once they are rolled. He was using an app to roll dice which is just....well....boring. Hence the Nixie Die Calculator was born. 
 
 Multiple web forums and thier contributors. <br />
 Adafruit forums<br />
