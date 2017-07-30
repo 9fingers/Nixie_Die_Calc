@@ -302,7 +302,7 @@ void drawSaveStage()
   int TXTyStart = 100;
   int TXTxWidth = 600;
   int TXTyWidth = 280;
-  // tft.fillRect(100,100,600,285, RA8875_RED);
+  tft.fillRect(100, 100, 600, 285, RA8875_BLACK);
   // Home button for all saving throw pages
   tft.fillRoundRect(250, 220, 300, 60, DRad, RA8875_WHITE);
   tft.fillRoundRect(250 + 3 , 220 + 3, 300 - 6 , 60 - 6, DRad, RA8875_BLUE);
@@ -1065,7 +1065,7 @@ void setup()
   tft.print("Welcome "); // print variable "LABEL"
   tft.print(charName);
   tft.print(", would you");
-  tft.textSetCursor(230, 240); // defines starting text position for this code block
+  tft.textSetCursor(160, 240); // defines starting text position for this code block
   tft.print("like to play a game?");
   tft.graphicsMode(); // return to graphics mode
   delay (3000);
