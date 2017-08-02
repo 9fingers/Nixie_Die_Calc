@@ -1443,6 +1443,7 @@ void readMainStage()
     dietouchread(4, D4xStart, BRyStart, DxSize, DySize, xScale, yScale);
     dietouchread(6, D6xStart, BRyStart, DxSize, DySize, xScale, yScale);
     dietouchread(8, D8xStart, BRyStart, DxSize, DySize, xScale, yScale);
+    dietouchread(10, D10xStart, BRyStart, DxSize, DySize, xScale, yScale);
     dietouchread(12, D12xStart, BRyStart, DxSize, DySize, xScale, yScale);
 
     // look for saving throw touches will roll saves and add modifer from SD card
